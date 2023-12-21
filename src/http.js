@@ -3,17 +3,22 @@ const url = require('url')
 const fs = require('fs')
 
 const server = http.createServer((request, response) => {
-    console.log(request.method)
-    console.log(request.headers);
+    // console.log(request.method)
+    // console.log(request.headers);
     // console.log(request.httpVersion);
     // console.log(request.url);
     // console.log(url.parse(request.url, true));
-    fs.readFile('./src/data/hello.html', 'utf-8', (err, data) => {
-        if (err) throw err;
-
-        response.writeHead(200, { 'Content-Type': 'application/json' })
-        response.end(data)
-    })
+    if (request.method === 'GET') {
+        fs.readFile('./src/data/hello.html', 'utf-8', (err, data) => {
+            if (err) throw err;
+    
+            response.writeHead(200, { 'Content-Type': 'application/json' })
+            response.end(data)
+        })
+    } else {
+        console.log(new Error('Error'));
+    }
+    
 })
 
 server.listen(3000, () => {
