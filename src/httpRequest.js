@@ -36,22 +36,24 @@ const server = http.createServer((request, response) => {
                     response.end(JSON.stringify({ message: 'Internal server error' }))
                 } else {
                     let postData = '';
-
+                    let fileData = JSON.parse(data)
 
                     request.on('data', chunk => {
                         postData += chunk
                     })
-                    console.log(postData);
 
                     request.on('end', chunk => {
-                        fs.writeFile(pathName, JSON.stringify(postData), (err) => {
-                            if (err) {
-                                response.writeHead(500, { 'Content-Type': 'application/json' })
-                                response.end(JSON.stringify({ message: 'Internal server error' }))
-                            } else {
+                        fileData.push(JSON.parse(postData));
+                        console.log(fileData);
 
-                            }
-                        })
+                        // fs.writeFile(pathName, JSON.stringify(postData), (err) => {
+                        //     if (err) {
+                        //         response.writeHead(500, { 'Content-Type': 'application/json' })
+                        //         response.end(JSON.stringify({ message: 'Internal server error' }))
+                        //     } else {
+
+                        //     }
+                        // })
                     })
                 }
             })
