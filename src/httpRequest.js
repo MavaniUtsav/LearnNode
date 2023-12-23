@@ -20,14 +20,6 @@ const server = http.createServer((request, response) => {
                     response.end(JSON.stringify(data))
                 }
             })
-            let Obj = {
-                'a': 'hello',
-                "b": 'namaste'
-            }
-
-            // for (const [key, value] of Object.entries(Obj)) {
-            //     console.log(`${key}: ${value}`);
-            // }
         } catch (error) {
             response.writeHead(500, { 'Content-Type': 'application/json' })
             response.end(JSON.stringify({ message: 'Internal server error' }))
