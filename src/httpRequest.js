@@ -118,7 +118,7 @@ const server = http.createServer((request, response) => {
                 response.end(JSON.stringify({ message: 'Internal server error' }))
             }
         })
-    } else if (method === 'delete') {
+    } else if (method === 'delete' && urlPath.pathname === '/api/data/') {
         let urlId = JSON.parse(urlPath.query.id)
 
         if (!isNaN(urlId)) {
