@@ -45,5 +45,17 @@
                 "ui_ux": 0
             }
         ]
+    },
+    {
+        "id": 7,
+        "name": "VFT IT institute",
+        "seat": [
+            {
+                "node": 0,
+                "full_stack": 0,
+                "ui_ux": 0,
+                "react": 0
+            }
+        ]
     }
 ]
