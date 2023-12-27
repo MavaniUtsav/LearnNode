@@ -2,7 +2,7 @@ let express = require('express')
 
 const app = express()
 
-app.use(express.json()) // for parsing application/json
+// app.use(express.json()) // for parsing application/json
 
 let institutes = [
     {
@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
         .filter((v) => Object.keys(v.seat[0]).length > 0)
 
     // express.
-    express.json(res.send(fData))
+    res.status(200).json(res.send(fData))
 })
 
 app.post('/', (req, res) => {
@@ -107,15 +107,34 @@ app.put('/', (req, res) => {
     }
 })
 
-app.delete('/',(req,res) => {
-    let id = req.query.id
+// app.delete('/',(req,res) => {
+//     let id = req.query.id
 
-    let data = institutes.filter((v) => v.id != id)
-    if (data) {
-        institutes = data
-        res.status(200).json({message:'Data deleted Successfuly'})
+//     let data = institutes.filter((v) => v.id != id)
+//     if (data) {
+//         institutes = data
+//         res.status(200).json({message:'Data deleted Successfuly'})
+//     } else {
+//         res.status(404).json({message:"Not Found"})
+//     }
+// })
+
+app.delete('/:instituteId/:courseKey', (req,res) => {
+    const instId = parseInt(req.params.instituteId)
+    const courseKey = req.params.courseKey
+
+    const fInstitute = institutes.find((v) => v.id === instId)
+    
+    if (fInstitute) {
+        if (fInstitute.seat[0].hasOwnProperty(courseKey)) {
+            delete fInstitute.seat[0][courseKey]
+            
+            res.status(200).json({message: `Key ${courseKey} deleted successfully`})
+        } else {
+            res.status(404).json({message: `The key ${courseKey} is not in the database`})
+        }
     } else {
-        res.status(404).json({message:"Not Found"})
+        res.status(404).json({message: 'Institute not found'})
     }
 })
 
