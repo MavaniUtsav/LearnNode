@@ -5,7 +5,9 @@ const routes = require('./routes/v1/index')
 
 app.use('/v1', routes)
 
-// app.use(express.json()) // for parsing application/json
+app.use(express.json()) // for parsing application/json
+
+app.set('view engine','ejs')
 
 // let institutes = [
 //     {
@@ -69,19 +71,22 @@ app.use('/v1', routes)
 //     }
 // ]
 
-// app.get('/', (req, res) => {
-//     let fData = institutes.map((v) => {
-//         return {
-//             id: v.id,
-//             name: v.name,
-//             seat: v.seat.map((v) => Object.fromEntries(Object.entries(v).filter(([key, val]) => val > 0)))
-//         }
-//     })
-//         .filter((v) => Object.keys(v.seat[0]).length > 0)
+app.get('/', (req, res) => {
+    res.render('index',{text:'OK'})
+    // res.download('./src/index.js')
+    
+    // let fData = institutes.map((v) => {
+    //     return {
+    //         id: v.id,
+    //         name: v.name,
+    //         seat: v.seat.map((v) => Object.fromEntries(Object.entries(v).filter(([key, val]) => val > 0)))
+    //     }
+    // })
+    //     .filter((v) => Object.keys(v.seat[0]).length > 0)
 
-//     // express.
-//     res.status(200).json(res.send(fData))
-// })
+    // express.
+    // res.status(200).json(res.send(fData))
+})
 
 // app.post('/', (req, res) => {
 //     const data = req.body;
@@ -140,6 +145,12 @@ app.use('/v1', routes)
 //     } else {
 //         res.status(404).json({message: 'Institute not found'})
 //     }
+// })
+
+// app.use((err,req,res) => {
+//     console.log(err);
+
+//     req.send({message: 'Something went worng!!'})
 // })
 
 
