@@ -3,10 +3,9 @@ let express = require('express')
 const app = express()
 const routes = require('./routes/v1/index')
 
-app.use('/v1', routes)
 
 app.use(express.json()) // for parsing application/json
-
+app.use('/v1', routes)
 app.set('view engine', 'ejs')
 
 // let institutes = [
@@ -147,11 +146,14 @@ app.get('/', (req, res) => {
 //     }
 // })
 
-// app.use((err,req,res) => {
-//     console.log(err);
+app.use((err,req,res) => {
+    console.log(err);
+    if (err) {
+        
+    }
 
-//     req.send({message: 'Something went worng!!'})
-// })
+    req.send({message: 'Something went worng!!'})
+})
 
 
 app.listen(3000, () => {

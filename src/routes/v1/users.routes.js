@@ -26,7 +26,7 @@ const userSchema = zod.object({
     name: zod.string().min(2),
     age: zod.number().gt(18),
     hobbies: zod.array(zod.string()),
-    country: zod.literal('IN').or(zod.literal('CA')).or(zod.literal('US'))
+    country: zod.literal('IN').or(zod.literal('CA')).or(zod.literal('US')),
 })
 
 
@@ -72,8 +72,8 @@ router.get('/',countVisit,(req, res) => {
 
 router.post('/', (req, res) => {
     const response = userSchema.safeParse(req.body)
-    // res.json(response)
-    console.log(response);
+    res.json(response)
+    // console.log(response);
     // res.send(response)
 })
 
