@@ -14,9 +14,12 @@ const validate = (schema) => (req, res, next) => {
     if (error) {
         const errors = error.details.map((v) => v.message).join(",")
 
-        res.assign(req, errors)
-        next()
+        return next(new Error("Validation Error: " + errors))
     }
+
+    Object.assign(req, value);
+
+    return next();
 }
 
 module.exports = validate
