@@ -7,7 +7,7 @@ app.use('/v1', routes)
 
 app.use(express.json()) // for parsing application/json
 
-app.set('view engine','ejs')
+app.set('view engine', 'ejs')
 
 // let institutes = [
 //     {
@@ -72,9 +72,9 @@ app.set('view engine','ejs')
 // ]
 
 app.get('/', (req, res) => {
-    res.render('index',{text:'OK'})
+    res.render('index', { text: 'OK' })
     // res.download('./src/index.js')
-    
+
     // let fData = institutes.map((v) => {
     //     return {
     //         id: v.id,
@@ -133,11 +133,11 @@ app.get('/', (req, res) => {
 //     const courseKey = req.params.courseKey
 
 //     const fInstitute = institutes.find((v) => v.id === instId)
-    
+
 //     if (fInstitute) {
 //         if (fInstitute.seat[0].hasOwnProperty(courseKey)) {
 //             delete fInstitute.seat[0][courseKey]
-            
+
 //             res.status(200).json({message: `Key ${courseKey} deleted successfully`})
 //         } else {
 //             res.status(404).json({message: `The key ${courseKey} is not in the database`})

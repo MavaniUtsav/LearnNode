@@ -72,8 +72,9 @@ router.get('/',countVisit,(req, res) => {
 
 router.post('/', (req, res) => {
     const response = userSchema.safeParse(req.body)
-    res.json(response)
-    // res.send('Post Users api')
+    // res.json(response)
+    console.log(response);
+    // res.send(response)
 })
 
 router.put('/', (req, res) => {
