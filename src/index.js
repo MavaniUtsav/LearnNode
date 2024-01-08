@@ -146,13 +146,12 @@ app.get('/', (req, res) => {
 //     }
 // })
 
-app.use((err,req,res) => {
-    console.log(err);
+app.use((err,req,res,next) => {
     if (err) {
-        
+        res.status(500).send({message: err.message})
+    } else {
+        next()
     }
-
-    req.send({message: 'Something went worng!!'})
 })
 
 
