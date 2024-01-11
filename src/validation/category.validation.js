@@ -17,7 +17,7 @@ const deleteCategory = {
 }
 
 const updateCategory = {
-    query: joi.object().keys()
+    params: joi.object().keys({ id: joi.number().integer() })
 }
 
 module.exports = {

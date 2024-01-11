@@ -12,6 +12,12 @@ router.get(
     categoryController.getCategory
 )
 
+router.get(
+    '/get-category/:id',
+    validate(categoryValidation.getCategory),
+    categoryController.getCategoryById
+)
+
 router.post(
     '/create-category',
     validate(categoryValidation.createCategory),
@@ -25,7 +31,7 @@ router.delete(
 )
 
 router.put(
-    '/update-category',
+    '/update-category/:id',
     validate(categoryValidation.updateCategory),
     categoryController.updateCategory
 )

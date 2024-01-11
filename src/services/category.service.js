@@ -9,6 +9,10 @@ const getCategory = () => {
     return Category.find()
 }
 
+const getCategpryById = (reqId) => {
+    return Category.findById(reqId)
+}
+
 const deletecategory = (reqId) => {
     return Category.findByIdAndDelete(reqId)
 }
@@ -21,5 +25,6 @@ module.exports = {
     createCategory,
     getCategory,
     deletecategory,
-    updateCategory
+    updateCategory,
+    getCategpryById
 }

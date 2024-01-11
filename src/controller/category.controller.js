@@ -38,6 +38,23 @@ const getCategory = async (req,res) => {
     }
 }
 
+const getCategoryById = async (req,res) => {
+    try {
+        let category = await categoryService.getCategpryById(req.params.id)
+        console.log(category);
+        if (!category) {
+            throw new Error('Get category error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: category
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 const deleteCategory = async (req,res) => {
     try {
         let category = await categoryService.deletecategory(req.params.id)
@@ -57,8 +74,8 @@ const deleteCategory = async (req,res) => {
 
 const updateCategory = async (req,res) => {
     try {
-        let category = await categoryService.updateCategory(req.query.id,req.body)
-        console.log(category);
+        let category = await categoryService.updateCategory(req.params.id,req.body)
+
         if (!category) {
             throw new Error('Update category error:')
         }
@@ -76,5 +93,6 @@ module.exports = {
     createCategory,
     getCategory,
     deleteCategory,
-    updateCategory
+    updateCategory,
+    getCategoryById
 }
