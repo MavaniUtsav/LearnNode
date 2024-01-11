@@ -1,10 +1,10 @@
 const Category = require("../model/category.model");
-const { createCategoryService } = require("../services/createCategory.service");
+const { createCategoryService, getCategoryService } = require("../services/category.service");
 
 
 const createCategory = async (req,res) => {
     try {
-        let category = Category(createCategoryService(req.body))
+        let category = await Category(createCategoryService(req.body))
 
         if (!category) {
             throw new Error('Create category error:')
@@ -19,6 +19,23 @@ const createCategory = async (req,res) => {
     }
 }
 
+const getCategory = async (req,res) => {
+    try {
+        let category = await getCategoryService()
+        console.log(category);
+        if (!category) {
+            throw new Error('Create category error:')
+        }
+
+        res.status(200).json({
+            success: true
+        })
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
-    createCategory
+    createCategory,
+    getCategory
 }
