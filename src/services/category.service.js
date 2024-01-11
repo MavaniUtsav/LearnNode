@@ -1,15 +1,25 @@
 const Category = require("../model/category.model")
 
 
-const createCategoryService = (reqBody) => {
+const createCategory = (reqBody) => {
     return Category.create(reqBody)
 }
 
-const getCategoryService = () => {
+const getCategory = () => {
     return Category.find()
 }
 
+const deletecategory = (reqId) => {
+    return Category.findByIdAndDelete(reqId)
+}
+
+const updateCategory = (reqId,reqBody) => {
+    return Category.findByIdAndUpdate(reqId,reqBody)
+}
+
 module.exports = {
-    createCategoryService,
-    getCategoryService
+    createCategory,
+    getCategory,
+    deletecategory,
+    updateCategory
 }

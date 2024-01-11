@@ -1,10 +1,6 @@
 
 const joi = require('joi')
 
-// const categoryValidation = {
-//     createCategory: joi.object().keys({
-// }
-
 const createCategory = {
     body: joi.object().keys({
         category_name: joi.string().required().trim(),
@@ -12,6 +8,21 @@ const createCategory = {
     })
 }
 
+const getCategory = {
+    body: joi.object().keys()
+}
+
+const deleteCategory = {
+    params: joi.object().keys()
+}
+
+const updateCategory = {
+    query: joi.object().keys()
+}
+
 module.exports = {
-    createCategory
+    createCategory,
+    getCategory,
+    deleteCategory,
+    updateCategory
 }
