@@ -1,8 +1,12 @@
 let express = require('express')
-
+let dotenv = require('dotenv')
 const app = express()
 const routes = require('./routes/v1/index')
+const connectDB = require('./db')
 
+dotenv.config()
+
+connectDB()
 
 app.use(express.json()) // for parsing application/json
 app.use('/v1', routes)

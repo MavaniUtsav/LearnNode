@@ -7,8 +7,8 @@ const joi = require('joi')
 
 const createCategory = {
     body: joi.object().keys({
-        id: joi.number().required(),
-        name: joi.string().required().trim(),
+        category_name: joi.string().required().trim(),
+        category_description: joi.string().required().trim()
     })
 }
 
