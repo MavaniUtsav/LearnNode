@@ -1,13 +1,14 @@
 const express = require('express');
 const { categoryValidation } = require('../../validation');
 const validate = require('../../middleware/validate');
-const { createCategory } = require('../../controller/category.controller');
+const { createCategory, getCategory } = require('../../controller/category.controller');
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    console.log('Get Category API');
-})
+router.get(
+    '/create-category',
+    getCategory
+)
 
 router.post(
     '/create-category',
