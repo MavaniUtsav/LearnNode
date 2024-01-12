@@ -40,7 +40,7 @@ const getCategory = async (req,res) => {
 
 const getCategoryById = async (req,res) => {
     try {
-        let category = await categoryService.getCategpryById(req.params.id)
+        let category = await categoryService.getCategoryById(req.params.id)
         console.log(category);
         if (!category) {
             throw new Error('Get category error:')

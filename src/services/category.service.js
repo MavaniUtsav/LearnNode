@@ -1,5 +1,5 @@
+const { CategoryModel } = require("../model")
 const Category = require("../model/category.model")
-
 
 const createCategory = (reqBody) => {
     return Category.create(reqBody)
@@ -9,7 +9,7 @@ const getCategory = () => {
     return Category.find()
 }
 
-const getCategpryById = (reqId) => {
+const getCategoryById = (reqId) => {
     return Category.findById(reqId)
 }
 
@@ -26,5 +26,5 @@ module.exports = {
     getCategory,
     deletecategory,
     updateCategory,
-    getCategpryById
+    getCategoryById
 }
