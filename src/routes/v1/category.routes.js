@@ -19,7 +19,7 @@ router.get(
 )
 
 router.post(
-    '/create-category',
+    '/list-category',
     validate(categoryValidation.createCategory),
     categoryController.createCategory
 )

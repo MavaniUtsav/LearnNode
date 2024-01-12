@@ -7,7 +7,7 @@ const { subCategoryController } = require('../../controller')
 const router = express.Router()
 
 router.post(
-    '/create-subcategory',
+    '/list-subcategory',
     validate(subCategoryValidation.createSubcategory),
     subCategoryController.createSubCategory
 )
