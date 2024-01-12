@@ -6,11 +6,6 @@ const { subCategoryController } = require('../../controller')
 
 const router = express.Router()
 
-router.post(
-    '/list-subcategory',
-    validate(subCategoryValidation.createSubcategory),
-    subCategoryController.createSubCategory
-)
 
 router.get(
     '/get-subcategory',
@@ -24,16 +19,22 @@ router.get(
     subCategoryController.getSubCategoryById
 )
 
-router.delete(
-    '/delete-subcategory/:id',
-    validate(subCategoryValidation.deleteSubcategory),
-    subCategoryController.deleteSubCategory
+router.post(
+    '/list-subcategory',
+    validate(subCategoryValidation.createSubcategory),
+    subCategoryController.createSubCategory
 )
 
 router.put(
     '/update-subcategory/:id',
     validate(subCategoryValidation.updateSubcategory),
     subCategoryController.updateSubCategory
+)
+
+router.delete(
+    '/delete-subcategory/:id',
+    validate(subCategoryValidation.deleteSubcategory),
+    subCategoryController.deleteSubCategory
 )
 
 module.exports = router

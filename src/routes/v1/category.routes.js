@@ -24,16 +24,16 @@ router.post(
     categoryController.createCategory
 )
 
-router.delete(
-    '/delete-category/:id',
-    validate(categoryValidation.deleteCategory),
-    categoryController.deleteCategory
-)
-
 router.put(
     '/update-category/:id',
     validate(categoryValidation.updateCategory),
     categoryController.updateCategory
+)
+
+router.delete(
+    '/delete-category/:id',
+    validate(categoryValidation.deleteCategory),
+    categoryController.deleteCategory
 )
 
 module.exports = router
