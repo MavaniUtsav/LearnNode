@@ -6,7 +6,7 @@ const createProduct = {
         category_id: joi.string().required(),
         subcategory_id: joi.string().required(),
         name: joi.string().required().trim(),
-        description: joi.string().required().trim()
+        description: joi.string().required().trim(),
     })
 }
 

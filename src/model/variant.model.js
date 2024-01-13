@@ -22,7 +22,7 @@ const variantSchema = mongoose.Schema(
             type: [String],
             default: []
         },
-        stocks: {
+        stock: {
             type: Number,
             required: true
         }
