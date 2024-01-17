@@ -91,3 +91,23 @@
         }
     }
 ]
+
+// 6. Find the user name with the maximum likes of posts.
+[
+    {
+      '$unwind': '$posts'
+    }, {
+      '$group': {
+        '_id': '$name', 
+        'maxLikes': {
+          '$max': '$posts.likes'
+        }
+      }
+    }, {
+      '$sort': {
+        'maxLikes': -1
+      }
+    }, {
+      '$limit': 1
+    }
+  ]
