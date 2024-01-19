@@ -6,7 +6,7 @@ const { productController } = require('../../controller')
 const router = express.Router()
 
 router.get(
-    '/get-product',
+    '/list-product',
     validate(productValidation.getProduct),
     productController.getProduct
 )
@@ -18,7 +18,7 @@ router.get(
 )
 
 router.post(
-    '/list-product',
+    '/create-product',
     validate(productValidation.createProduct),
     productController.createProduct
 )

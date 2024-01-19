@@ -7,7 +7,7 @@ const { categoryController } = require('../../controller');
 const router = express.Router()
 
 router.get(
-    '/get-category',
+    '/list-category',
     validate(categoryValidation.getCategory),
     categoryController.getCategory
 )
@@ -19,7 +19,7 @@ router.get(
 )
 
 router.post(
-    '/list-category',
+    '/create-category',
     validate(categoryValidation.createCategory),
     categoryController.createCategory
 )

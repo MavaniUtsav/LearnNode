@@ -6,7 +6,7 @@ const { variantController } = require('../../controller')
 const router = express.Router()
 
 router.get(
-    '/get-variant',
+    '/list-variant',
     validate(variantValidation.getVariant),
     variantController.getVariant
 )
@@ -18,7 +18,7 @@ router.get(
 )
 
 router.post(
-    '/list-variant',
+    '/create-variant',
     validate(variantValidation.createVariant),
     variantController.createVariant
 )

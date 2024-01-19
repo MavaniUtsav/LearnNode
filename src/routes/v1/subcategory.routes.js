@@ -8,7 +8,7 @@ const router = express.Router()
 
 
 router.get(
-    '/get-subcategory',
+    '/list-subcategory',
     validate(subCategoryValidation.getSubcategory),
     subCategoryController.getSubCategory
 )
@@ -20,7 +20,7 @@ router.get(
 )
 
 router.post(
-    '/list-subcategory',
+    '/create-subcategory',
     validate(subCategoryValidation.createSubcategory),
     subCategoryController.createSubCategory
 )
