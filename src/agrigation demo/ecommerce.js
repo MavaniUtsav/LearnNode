@@ -5,7 +5,7 @@
             'is_Active': true
         }
     }, {
-        '$count': 'string'
+        '$count': 'No of Active Actegory'
     }
 ]
 
@@ -23,6 +23,17 @@
         '$match': {
             'userOrder': { '$gt': 3 }
         }
+    },
+    {
+        '$lookup': {
+            'from': 'user',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'UserData'
+        }
+    },
+    {
+        '$unwind': '$UserData'
     }
 ]
 
@@ -35,37 +46,51 @@
                 '$sum': '$total_amount'
             }
         }
+    },
+    {
+        $lookup: {
+            from: "user",
+            localField: "_id",
+            foreignField: "_id",
+            as: "Seller"
+        }
+    },
+    {
+        $unwind: "$Seller"
+    },
+    {
+        $project: {
+            "Seller.name": 1,
+            "Seller.mobile_no": 1,
+            "Seller.email": 1
+        }
     }
 ]
 
 // 4. Retrieve the products with the highest average rating.
 [
     {
-        '$lookup': {
-            'from': 'product',
-            'localField': 'product_id',
-            'foreignField': '_id',
-            'as': 'product'
-        }
-    }, {
-        '$project': {
-            'product_id': '$product_id',
-            'product': '$product',
-            'rating': '$rating'
-        }
-    }, {
         '$group': {
             '_id': '$product_id',
-            'avgRatings': {
+            'AvgRating': {
                 '$avg': '$rating'
             }
         }
     }, {
         '$sort': {
-            'avgRatings': -1
+            'AvgRating': -1
         }
     }, {
-        '$limit': 1
+        '$limit': 5
+    }, {
+        '$lookup': {
+            'from': 'user',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'Product'
+        }
+    }, {
+        '$unwind': '$Product'
     }
 ]
 
@@ -78,6 +103,17 @@
                 '$sum': 1
             }
         }
+    },
+    {
+        '$lookup': {
+            'from': 'subcategory',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'subcategory'
+        }
+    },
+    {
+        '$unwind': '$subcategory'
     }
 ]
 
@@ -96,6 +132,13 @@
                 '$size': 0
             }
         }
+    },
+    {
+        '$project': {
+            '_id': 1,
+            'name': 1,
+            'email': 1
+        }
     }
 ]
 
@@ -106,6 +149,11 @@
             '_id': '$product_id',
             'totalReview': {
                 '$sum': 1
+            },
+            'reviews': {
+                '$push': {
+                    'comment': '$comment'
+                }
             }
         }
     }, {
@@ -113,13 +161,21 @@
             'totalReview': -1
         }
     }, {
-        '$limit': 1
+        '$limit': 5
     }, {
         '$lookup': {
             'from': 'product',
             'localField': '_id',
             'foreignField': '_id',
-            'as': 'Product'
+            'as': 'product'
+        }
+    }, {
+        '$unwind': '$product'
+    }, {
+        '$project': {
+            'product.name': 1,
+            'product.description': 1,
+            'reviews': 1
         }
     }
 ]
@@ -135,6 +191,22 @@
             'Revenue': {
                 '$sum': '$total_amount'
             }
+        }
+    }, {
+        '$lookup': {
+            'from': 'user',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'sellerDetails'
+        }
+    }, {
+        '$unwind': '$sellerDetails'
+    }, {
+        '$project': {
+            '_id': '$sellerDetails._id',
+            'name': '$sellerDetails.name',
+            'Revenue': '$Revenue',
+            'AvgOrderValue': '$AvgOrderValue'
         }
     }
 ]
@@ -153,6 +225,13 @@
             'localField': 'product_id',
             'foreignField': '_id',
             'as': 'Product'
+        }
+    }, {
+        '$unwind': '$Product'
+    }, {
+        '$project': {
+            'productName': '$Product.name',
+            'variantAttributes': '$attributes'
         }
     }
 ]
@@ -179,6 +258,14 @@
             'foreignField': '_id',
             'as': 'User'
         }
+    }, {
+        '$unwind': '$User'
+    }, {
+        '$project': {
+            '_id': '$User._id',
+            'name': '$User.name',
+            'totalOrderValue': '$totalOrder'
+        }
     }
 ]
 
@@ -191,10 +278,50 @@
                 '$avg': '$rating'
             }
         }
+    }, {
+        '$lookup': {
+            'from': 'product',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'productDetails'
+        }
+    }, {
+        '$unwind': '$productDetails'
+    }, {
+        '$project': {
+            'productName': '$productDetails.name',
+            'averageRating': '$AvgRating'
+        }
     }
 ]
 
 // 12. Retrieve the latest 5 reviews with user details. 
+[
+    {
+        '$sort': {
+            '_id': -1
+        }
+    }, {
+        '$limit': 5
+    }, {
+        '$lookup': {
+            'from': 'user',
+            'localField': 'user_id',
+            'foreignField': '_id',
+            'as': 'userDetails'
+        }
+    }, {
+        '$unwind': '$userDetails'
+    }, {
+        '$project': {
+            '_id': 1,
+            'rating': 1,
+            'comment': 1,
+            'userName': '$userDetails.name',
+            'userEmail': '$userDetails.email'
+        }
+    }
+]
 
 // 13. Identify the users who have items in their cart with a quantity greater than 5.
 [
@@ -206,10 +333,28 @@
                 '$gt': 5
             }
         }
+    }, {
+        '$lookup': {
+            'from': 'user',
+            'localField': 'user_id',
+            'foreignField': '_id',
+            'as': 'userDetails'
+        }
+    }, {
+        '$unwind': '$userDetails'
+    }, {
+        '$project': {
+            '_id': '$userDetails._id',
+            'name': '$userDetails.name',
+            'email': '$userDetails.email',
+            'itemName': '$items.product_id',
+            'itemQuantity': '$items.quantity'
+        }
     }
 ]
 
 // 14. Calculate the total number of orders placed using each payment gateway.
+// Sir Mistake
 [
     {
         '$match': {
@@ -218,14 +363,14 @@
     }, {
         '$group': {
             '_id': '$gateway',
-            'totalOrder': {
+            'totalCompletedOrder': {
                 '$sum': 1
             }
         }
     }
 ]
 
-// 15. Find the subcategories with no active products.
+// 15. Find the subcategories with no active products?? //Q
 [
     {
         '$match': {
@@ -267,6 +412,10 @@
             'review': {
                 '$size': 0
             }
+        }
+    }, {
+        '$project': {
+            'productName': '$name'
         }
     }
 ]
@@ -310,7 +459,8 @@
     }
 ]
 
-// 19. Find the top 3 subcategories with the highest average product price.
+// 19. Find the top 3 subcategories with the highest average product price. 
+// Sir Mistake
 [
     {
         '$lookup': {
@@ -350,7 +500,15 @@
             'from': 'product',
             'localField': 'product_id',
             'foreignField': '_id',
-            'as': 'Product'
+            'as': 'productDetails'
+        }
+    }, {
+        '$unwind': '$productDetails'
+    }, {
+        '$project': {
+            'productName': '$productDetails.name',
+            'rating': 1,
+            'comment': 1
         }
     }
 ]
