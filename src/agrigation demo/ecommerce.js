@@ -70,5 +70,288 @@
 ]
 
 // 5. Calculate the total number of products in each subcategory.
+[
+    {
+        '$group': {
+            '_id': '$subcategory_id',
+            'TotalProduct': {
+                '$sum': 1
+            }
+        }
+    }
+]
 
+// 6. Find the users who have not made any orders.
+[
+    {
+        '$lookup': {
+            'from': 'order',
+            'localField': '_id',
+            'foreignField': 'user_id',
+            'as': 'orders'
+        }
+    }, {
+        '$match': {
+            'orders': {
+                '$size': 0
+            }
+        }
+    }
+]
+
+// 7. Identify the most popular product (highest number of reviews).    
+[
+    {
+        '$group': {
+            '_id': '$product_id',
+            'totalReview': {
+                '$sum': 1
+            }
+        }
+    }, {
+        '$sort': {
+            'totalReview': -1
+        }
+    }, {
+        '$limit': 1
+    }, {
+        '$lookup': {
+            'from': 'product',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'Product'
+        }
+    }
+]
+
+//   8. Calculate the total revenue and average order value for each seller.
+[
+    {
+        '$group': {
+            '_id': '$seller_id',
+            'AvgOrderValue': {
+                '$avg': '$total_amount'
+            },
+            'Revenue': {
+                '$sum': '$total_amount'
+            }
+        }
+    }
+]
+
+// 9. Find the products with a quantity less than 20 in the Variant collection.
+[
+    {
+        '$match': {
+            'attributes.Quantity': {
+                '$lt': 20
+            }
+        }
+    }, {
+        '$lookup': {
+            'from': 'product',
+            'localField': 'product_id',
+            'foreignField': '_id',
+            'as': 'Product'
+        }
+    }
+]
+
+// 10. Retrieve the top 5 customers with the highest total order value.
+[
+    {
+        '$group': {
+            '_id': '$user_id',
+            'totalOrder': {
+                '$sum': 1
+            }
+        }
+    }, {
+        '$sort': {
+            'totalOrder': -1
+        }
+    }, {
+        '$limit': 5
+    }, {
+        '$lookup': {
+            'from': 'user',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'User'
+        }
+    }
+]
+
+// 11. Find the average rating for each product.
+[
+    {
+        '$group': {
+            '_id': '$product_id',
+            'AvgRating': {
+                '$avg': '$rating'
+            }
+        }
+    }
+]
+
+// 12. Retrieve the latest 5 reviews with user details. 
+
+// 13. Identify the users who have items in their cart with a quantity greater than 5.
+[
+    {
+        '$unwind': '$items'
+    }, {
+        '$match': {
+            'items.quantity': {
+                '$gt': 5
+            }
+        }
+    }
+]
+
+// 14. Calculate the total number of orders placed using each payment gateway.
+[
+    {
+        '$match': {
+            'status': 'Completed'
+        }
+    }, {
+        '$group': {
+            '_id': '$gateway',
+            'totalOrder': {
+                '$sum': 1
+            }
+        }
+    }
+]
+
+// 15. Find the subcategories with no active products.
+[
+    {
+        '$match': {
+            'isActive': false
+        }
+    }, {
+        '$lookup': {
+            'from': 'subcategory',
+            'localField': 'subcategory_id',
+            'foreignField': '_id',
+            'as': 'subcategory'
+        }
+    }
+]
+
+// 16. Retrieve the orders with a total amount greater than 2000 and status as "Completed."
+[
+    {
+        '$match': {
+            'total_amount': {
+                '$gt': 2000
+            },
+            'status': 'Completed'
+        }
+    }
+]
+
+// 17. Identify the products that have not been reviewed.
+[
+    {
+        '$lookup': {
+            'from': 'review',
+            'localField': '_id',
+            'foreignField': 'product_id',
+            'as': 'review'
+        }
+    }, {
+        '$match': {
+            'review': {
+                '$size': 0
+            }
+        }
+    }
+]
+
+// 18. Calculate the total revenue and total quantity sold for each product.
+[
+    {
+        '$unwind': '$products'
+    }, {
+        '$group': {
+            '_id': '$products.product_id',
+            'totalQuantity': {
+                '$sum': '$products.quantity'
+            }
+        }
+    }, {
+        '$lookup': {
+            'from': 'product',
+            'localField': '_id',
+            'foreignField': '_id',
+            'as': 'Product'
+        }
+    }, {
+        '$lookup': {
+            'from': 'variant',
+            'localField': 'Product.0.variant_id',
+            'foreignField': '_id',
+            'as': 'variant'
+        }
+    }, {
+        '$unwind': '$variant'
+    }, {
+        '$project': {
+            'totalQuantity': '$totalQuantity',
+            'totalRevenue': {
+                '$multiply': [
+                    '$variant.attributes.Price', '$totalQuantity'
+                ]
+            }
+        }
+    }
+]
+
+// 19. Find the top 3 subcategories with the highest average product price.
+[
+    {
+        '$lookup': {
+            'from': 'variant',
+            'localField': 'variant_id',
+            'foreignField': '_id',
+            'as': 'variant'
+        }
+    }, {
+        '$unwind': '$variant'
+    }, {
+        '$group': {
+            '_id': '$subcategory_id',
+            'avgProductPrice': {
+                '$avg': '$variant.attributes.Price'
+            }
+        }
+    }, {
+        '$sort': {
+            'avgProductPrice': -1
+        }
+    }, {
+        '$limit': 3
+    }
+]
+
+// 20. Retrieve the products that have received reviews with ratings greater than 4.
+[
+    {
+        '$match': {
+            'rating': {
+                '$gt': 4
+            }
+        }
+    }, {
+        '$lookup': {
+            'from': 'product',
+            'localField': 'product_id',
+            'foreignField': '_id',
+            'as': 'Product'
+        }
+    }
+]
 
