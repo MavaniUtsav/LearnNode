@@ -86,10 +86,46 @@ const updateSubCategory = async (req,res) => {
     }
 }
 
+const parentOfSubcategory = async (req,res) => {
+    try {
+        let parentOfSubcategory = await subCategoryService.parentOfSubcategory(req.params.id)
+
+        if (!parentOfSubcategory) {
+            throw new Error('Get subcategory error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: parentOfSubcategory
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const listByCategory = async (req,res) => {
+    try {
+        let parentOfSubcategory = await subCategoryService.parentOfSubcategory(req.params.id)
+
+        if (!parentOfSubcategory) {
+            throw new Error('Get subcategory error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: parentOfSubcategory
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 module.exports = {
     createSubCategory,
     getSubCategory,
     getSubCategoryById,
     deleteSubCategory,
-    updateSubCategory
+    updateSubCategory,
+    parentOfSubcategory
 }

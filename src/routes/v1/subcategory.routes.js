@@ -37,4 +37,16 @@ router.delete(
     subCategoryController.deleteSubCategory
 )
 
+router.get(
+    '/parent-of-subcategory/:id',
+    validate(subCategoryValidation.getSubcategory),
+    subCategoryController.parentOfSubcategory
+)
+
+router.get(
+    '/list-by-category/:id',
+    validate(subCategoryValidation.getSubcategory),
+    subCategoryController
+)
+
 module.exports = router

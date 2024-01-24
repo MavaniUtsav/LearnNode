@@ -89,10 +89,100 @@ const updateCategory = async (req,res) => {
     }
 }
 
+const countActive = async (req,res) => {
+    try {
+        let activeCategory = await categoryService.countActive()
+
+        if (!activeCategory) {
+            throw new Error('Get active category error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: activeCategory
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const mostProducts = async (req,res) => {
+    try {
+        let mostProducts = await categoryService.mostProducts()
+
+        if (!mostProducts) {
+            throw new Error('Get active category error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: mostProducts
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const averageProducts = async (req,res) => {
+    try {
+        let averageProducts = await categoryService.averageProducts()
+
+        if (!averageProducts) {
+            throw new Error('Get active category error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: averageProducts
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const countInActive = async (req,res) => {
+    try {
+        let countInActive = await categoryService.countInActive()
+
+        if (!countInActive) {
+            throw new Error('Get active category error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: countInActive
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const countSubcategories = async (req,res) => {
+    try {
+        let countSubcategories = await categoryService.countSubcategories()
+
+        if (!countSubcategories) {
+            throw new Error('Get active category error:')
+        }
+
+        res.status(200).json({
+            success: true,
+            data: countSubcategories
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     createCategory,
     getCategory,
     deleteCategory,
     updateCategory,
-    getCategoryById
+    getCategoryById,
+    countActive,
+    mostProducts,
+    averageProducts,
+    countInActive,
+    countSubcategories
 }

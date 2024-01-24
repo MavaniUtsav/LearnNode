@@ -36,4 +36,35 @@ router.delete(
     categoryController.deleteCategory
 )
 
+router.get(
+    '/count-active',
+    validate(categoryValidation.getCategory),
+    categoryController.countActive
+)
+
+router.get(
+    '/most-products',
+    validate(categoryValidation.getCategory),
+    categoryController.mostProducts
+)
+
+router.get(
+    '/average-products',
+    validate(categoryValidation.getCategory),
+    categoryController.averageProducts
+)
+
+router.get(
+    '/inactive',
+    validate(categoryValidation.getCategory),
+    categoryController.countInActive
+)
+
+router.get(
+    '/count-subcategories',
+    validate(categoryValidation.getCategory),
+    categoryController.countSubcategories
+)
+
+
 module.exports = router
