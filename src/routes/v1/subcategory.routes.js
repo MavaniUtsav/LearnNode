@@ -43,10 +43,10 @@ router.get(
     subCategoryController.parentOfSubcategory
 )
 
-router.get(
-    '/list-by-category/:id',
-    validate(subCategoryValidation.getSubcategory),
-    subCategoryController
-)
+// router.get(
+//     '/list-by-category/:id',
+//     validate(subCategoryValidation.getSubcategory),
+//     subCategoryController
+// )
 
 module.exports = router
