@@ -101,8 +101,14 @@ const loginUser = async (req, res) => {
         const { accessToken, refreshToken } = await accessRefreshToken(user._id)
 
         const userData = await User.findOne(user._id).select("-password -refresh_token")
+
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
         
-        res.cookie()
+        res.cookie('accessToken', accessToken, options)
+        res.cookie('refreshToken', refreshToken, options)
 
         res.status(200).json({
             success: true,

@@ -3,12 +3,18 @@ let dotenv = require('dotenv')
 const app = express()
 const routes = require('./routes/v1/index')
 const connectDB = require('./db')
+const cookieParser = require('cookie-parser')
+
+
 
 dotenv.config()
 
 connectDB()
 
+app.use(cookieParser())
 app.use(express.json()) // for parsing application/json
+
+
 app.use('/v1', routes)
 app.set('view engine', 'ejs')
 

@@ -3,6 +3,7 @@ const zod = require('zod');
 const { UserValidation } = require('../../validation');
 const { userController } = require('../../controller');
 const validate = require('../../middleware/validate');
+const authMiddleware = require('../../middleware/auth');
 
 const router = express.Router()
 
@@ -42,6 +43,17 @@ router.post(
     validate(UserValidation.loginUser),
     userController.loginUser
 )
+
+// router.get(
+//     '/protected-route',
+//     authMiddleware,
+//     (req, res) => {
+//         res.json({
+//             message: "You are in the protected route",
+//             user: "User Data"
+//         })
+//     }
+// )
 
 
 // router.get('/:id', (req, res) => {
