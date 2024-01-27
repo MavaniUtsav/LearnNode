@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../model/user.model')
 const { use } = require('../routes/v1/users.routes')
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = (roles) => async (req, res, next) => {
     try {
         const Token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
@@ -12,9 +12,20 @@ const authMiddleware = async (req, res, next) => {
             })
         }
 
-        try {
-            const decode = await jwt.verify(Token, `${process.env.ACCESS_TOKEN_KEY}`)
-            
+        await jwt.verify(Token, `${process.env.ACCESS_TOKEN_KEY}`, async function (error, decode) {
+
+            if (error || !roles.some((role) => role == decode.role)) {
+                if (error instanceof jwt.TokenExpiredError) {
+                    return res.status(401).json({
+                        message: 'Access token has expired',
+                    });
+                }
+
+                return res.status(400).json({
+                    message: "Invalid access token!"
+                })
+            }
+
             const user = await User.findById(decode.id).select("-password -refresh_token")
 
             if (!user) {
@@ -25,17 +36,9 @@ const authMiddleware = async (req, res, next) => {
 
             req.user = user
             next()
-        } catch (error) {
-            if (error instanceof jwt.TokenExpiredError) {
-                return res.status(401).json({
-                    message: 'Access token has expired',
-                });
-            }
+        })
 
-            return res.status(400).json({
-                message: "Invalid access token!"
-            })
-        }
+
     } catch (error) {
         res.status(500).json({
             message: error.message,

@@ -22,7 +22,7 @@ router.get(
 router.post(
     '/create-category',
     validate(categoryValidation.createCategory),
-    authMiddleware,
+    authMiddleware(['admin', 'seller']),
     categoryController.createCategory
 )
 

@@ -38,10 +38,16 @@ router.post(
     validate(UserValidation.registerUser),
     userController.registerUser
 )
+
 router.post(
     '/login',
     validate(UserValidation.loginUser),
     userController.loginUser
+)
+
+router.post(
+    '/generateNewTokens',
+    userController.generateNewTokens
 )
 
 // router.get(

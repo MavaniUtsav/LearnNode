@@ -13,7 +13,8 @@ const accessRefreshToken = async (userId) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                address: user.address
+                address: user.address,
+                role: user.role
             },
             `${process.env.ACCESS_TOKEN_KEY}`,
             { expiresIn: `${process.env.ACCESS_TOKEN_EXPIRY}` } // 1 DAYS
@@ -26,7 +27,8 @@ const accessRefreshToken = async (userId) => {
             `${process.env.REFRESH_TOKEN_KEY}`,
             { expiresIn: `${process.env.REFRESH_TOKEN_EXPIRY}` } // 15 DAYS
         )
-
+            console.log(accessToken);
+            console.log(refreshToken);
         user.refresh_token = refreshToken
 
         await user.save()
@@ -122,7 +124,29 @@ const loginUser = async (req, res) => {
     }
 }
 
+const generateNewTokens = async (req, res) => {
+    try {
+        const Token = req.cookies?.accessToken || req.body?.accessToken
+
+        if (!Token) {
+            return res.status(401).json({
+                message: "Token required!"
+            })
+        }
+        console.log(Token);
+        const user = await User.findOne({refresh_token: Token}).select("-password -refresh_token")
+
+        console.log(user);
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    generateNewTokens
 }
