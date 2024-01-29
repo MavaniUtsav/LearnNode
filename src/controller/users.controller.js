@@ -27,8 +27,7 @@ const accessRefreshToken = async (userId) => {
             `${process.env.REFRESH_TOKEN_KEY}`,
             { expiresIn: `${process.env.REFRESH_TOKEN_EXPIRY}` } // 15 DAYS
         )
-            console.log(accessToken);
-            console.log(refreshToken);
+
         user.refresh_token = refreshToken
 
         await user.save()
@@ -43,7 +42,6 @@ const accessRefreshToken = async (userId) => {
 const registerUser = async (req, res) => {
     try {
         const { email, mobile_no, password } = req.body
-        console.log(email, mobile_no);
         //checking if user already exists or not
         const userExists = await User.findOne({
             $or: [{ email }, { mobile_no }]
@@ -108,7 +106,7 @@ const loginUser = async (req, res) => {
             httpOnly: true,
             secure: true
         }
-        
+
         res.cookie('accessToken', accessToken, options)
         res.cookie('refreshToken', refreshToken, options)
 
@@ -126,7 +124,50 @@ const loginUser = async (req, res) => {
 
 const generateNewTokens = async (req, res) => {
     try {
-        const Token = req.cookies?.accessToken || req.body?.accessToken
+        const Token = req.cookies?.refreshToken || req.body?.refreshToken
+
+        if (!Token) {
+            return res.status(401).json({
+                message: "Token required!"
+            })
+        }
+
+        const user = await User.findOne({ refresh_token: Token }).select("-password -refresh_token")
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found!"
+            })
+        }
+
+        const { accessToken, refreshToken } = await accessRefreshToken(user._id)
+
+        const userData = await User.findOne(user._id).select("-password -refresh_token")
+
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+
+        res.cookie('accessToken', accessToken, options)
+        res.cookie('refreshToken', refreshToken, options)
+
+        res.status(200).json({
+            success: true,
+            data: { ...userData, access_token: accessToken },
+            message: 'New tokens generated!!'
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+const logout = async (req, res) => {
+    try {
+        const Token = req.cookies?.refreshToken
 
         if (!Token) {
             return res.status(401).json({
@@ -134,9 +175,23 @@ const generateNewTokens = async (req, res) => {
             })
         }
         console.log(Token);
-        const user = await User.findOne({refresh_token: Token}).select("-password -refresh_token")
 
+        const user = await User.findOneAndUpdate({ refresh_token: Token }, { $unset: {refresh_token: 1} })
         console.log(user);
+        if (!user) {
+            return res.status(401).json({
+                message: "Invalid token!"
+            })
+        }
+
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
+
+        res.status(200).json({
+                message: 'Logout successfully'
+            })
+
+
 
     } catch (error) {
         return res.status(500).json({
@@ -148,5 +203,6 @@ const generateNewTokens = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
-    generateNewTokens
+    generateNewTokens,
+    logout
 }

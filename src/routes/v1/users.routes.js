@@ -50,6 +50,11 @@ router.post(
     userController.generateNewTokens
 )
 
+router.post(
+    '/logout',
+    userController.logout
+)
+
 // router.get(
 //     '/protected-route',
 //     authMiddleware,
