@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const { userService } = require("../services");
 const jwt = require('jsonwebtoken');
 const { ref } = require("joi");
+const { uploadFile } = require("../clou/cloudinary");
+const { upload } = require("../middleware/upload");
 
 const accessRefreshToken = async (userId) => {
     try {
@@ -55,6 +57,14 @@ const registerUser = async (req, res) => {
 
         const hashPass = await bcrypt.hash(password, 10)
 
+        if (!req.file) {
+            return res.status(400).json({
+                message: "File is required!!"
+            })
+        }
+
+        const uploadData = await uploadFile(req.file.path)
+        console.log(uploadData);
         const user = await userService.registerUser({ ...req.body, password: hashPass })
 
         if (!user) {
