@@ -4,6 +4,7 @@ const { UserValidation } = require('../../validation');
 const { userController } = require('../../controller');
 const validate = require('../../middleware/validate');
 const authMiddleware = require('../../middleware/auth');
+const { upload } = require('../../middleware/upload');
 
 const router = express.Router()
 
@@ -35,6 +36,7 @@ const router = express.Router()
 
 router.post(
     '/register',
+    upload.single('profile_pic'),
     validate(UserValidation.registerUser),
     userController.registerUser
 )

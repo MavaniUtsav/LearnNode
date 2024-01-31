@@ -4,12 +4,23 @@ const app = express()
 const routes = require('./routes/v1/index')
 const connectDB = require('./db')
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser');
+const cors = require("cors");
 
+const corsOptions = {
+    origin: '*',
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+}
 
+app.use(cors(corsOptions))
 
 dotenv.config()
 
 connectDB()
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(cookieParser())
 app.use(express.json()) // for parsing application/json
@@ -156,9 +167,9 @@ app.get('/', (req, res) => {
 //     }
 // })
 
-app.use((err,req,res,next) => {
+app.use((err, req, res, next) => {
     if (err) {
-        res.status(500).send({message: err.message})
+        res.status(500).send({ message: err.message })
     } else {
         next()
     }

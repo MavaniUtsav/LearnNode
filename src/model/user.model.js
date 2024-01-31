@@ -30,6 +30,12 @@ const userSchema = mongoose.Schema(
         role: {
             type: String,
         },
+        // profile_pic: {
+        //     type: {
+        //         profile_id: String,
+
+        //     }
+        // },
         refresh_token: {
             type: String,
         },
