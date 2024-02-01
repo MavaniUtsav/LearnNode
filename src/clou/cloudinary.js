@@ -8,10 +8,11 @@ cloudinary.config({
 });
 
 const uploadFile = async (path) => {
+    console.log('upload');
     try {
         const result = await cloudinary.uploader.upload(path);
 
-        fs.unlinkSync(path)
+        await fs.unlinkSync(path)
 
         return result
     } catch (error) {
@@ -19,6 +20,17 @@ const uploadFile = async (path) => {
     }
 }
 
+const deleteFile = async (public_id) => {
+    try {
+        const result = await cloudinary.uploader.destroy(public_id);
+
+        return result
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
-    uploadFile
+    uploadFile,
+    deleteFile
 }

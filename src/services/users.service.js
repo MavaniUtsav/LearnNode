@@ -5,6 +5,10 @@ const registerUser = (reqBody) => {
     return User.create(reqBody)
 }
 
+const updateUser = () => {
+    
+}
+
 module.exports = {
     registerUser,
 }

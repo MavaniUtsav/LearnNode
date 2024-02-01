@@ -42,6 +42,12 @@ router.post(
 )
 
 router.post(
+    '/updatedetail/:id',
+    upload.single('profile_pic'),
+    userController.updateUser
+)
+
+router.post(
     '/login',
     validate(UserValidation.loginUser),
     userController.loginUser
@@ -56,6 +62,8 @@ router.post(
     '/logout',
     userController.logout
 )
+
+
 
 // router.get(
 //     '/protected-route',

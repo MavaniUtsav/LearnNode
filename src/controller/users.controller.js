@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { userService } = require("../services");
 const jwt = require('jsonwebtoken');
 const { ref } = require("joi");
-const { uploadFile } = require("../clou/cloudinary");
+const { uploadFile, deleteFile } = require("../clou/cloudinary");
 const { upload } = require("../middleware/upload");
 
 const accessRefreshToken = async (userId) => {
@@ -64,8 +64,17 @@ const registerUser = async (req, res) => {
         }
 
         const uploadData = await uploadFile(req.file.path)
+
         console.log(uploadData);
-        const user = await userService.registerUser({ ...req.body, password: hashPass })
+
+        const user = await userService.registerUser({
+            ...req.body,
+            password: hashPass,
+            profile_pic: {
+                public_id: uploadData.public_id,
+                url: uploadData.url
+            }
+        })
 
         if (!user) {
             return res.status(400).json({
@@ -132,6 +141,51 @@ const loginUser = async (req, res) => {
     }
 }
 
+const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const userToUpdate = await User.findById(id)
+
+        if (!userToUpdate) {
+            return res.status(400).json({
+                message: "User not found"
+            })
+        }
+
+        for (const [key, value] of Object.entries(req.body)) {
+            userToUpdate[key] = value;
+        }
+
+
+
+        if (req.file) {
+            const uploadData = await uploadFile(req.file.path)
+
+            if (!uploadData) {
+                return res.status(400).json({
+                    message: "Internal server error!!"
+                })
+            }
+
+            await deleteFile(userToUpdate.profile_pic.public_id)
+            
+            userToUpdate.profile_pic.public_id = uploadData.public_id;
+            userToUpdate.profile_pic.url = uploadData.url;
+        }
+
+        await userToUpdate.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'User updated!!',
+            data: userToUpdate
+        })
+    } catch (error) {
+
+    }
+}
+
 const generateNewTokens = async (req, res) => {
     try {
         const Token = req.cookies?.refreshToken || req.body?.refreshToken
@@ -186,7 +240,7 @@ const logout = async (req, res) => {
         }
         console.log(Token);
 
-        const user = await User.findOneAndUpdate({ refresh_token: Token }, { $unset: {refresh_token: 1} })
+        const user = await User.findOneAndUpdate({ refresh_token: Token }, { $unset: { refresh_token: 1 } })
         console.log(user);
         if (!user) {
             return res.status(401).json({
@@ -198,8 +252,8 @@ const logout = async (req, res) => {
         res.clearCookie('refreshToken');
 
         res.status(200).json({
-                message: 'Logout successfully'
-            })
+            message: 'Logout successfully'
+        })
 
 
 
@@ -214,5 +268,6 @@ module.exports = {
     registerUser,
     loginUser,
     generateNewTokens,
-    logout
+    logout,
+    updateUser
 }
