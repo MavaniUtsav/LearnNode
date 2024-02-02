@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { userService } = require("../services");
 const jwt = require('jsonwebtoken');
 const { ref } = require("joi");
-const { uploadFile, deleteFile } = require("../clou/cloudinary");
+const { uploadFile, deleteFile } = require("../utils/cloudinary");
 const { upload } = require("../middleware/upload");
 
 const accessRefreshToken = async (userId) => {
@@ -156,8 +156,6 @@ const updateUser = async (req, res) => {
         for (const [key, value] of Object.entries(req.body)) {
             userToUpdate[key] = value;
         }
-
-
 
         if (req.file) {
             const uploadData = await uploadFile(req.file.path)

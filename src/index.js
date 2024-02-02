@@ -6,6 +6,8 @@ const connectDB = require('./db')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const passport = require('passport')
+const connectPassport = require('./utils/passport')
 
 const corsOptions = {
     origin: '*',
@@ -25,6 +27,16 @@ app.use(bodyParser.json());
 app.use(cookieParser())
 app.use(express.json()) // for parsing application/json
 
+app.use(require('express-session')({
+    secret: 'sdvfsdghbsdfmjhkrthr',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+connectPassport()
 
 app.use('/v1', routes)
 app.set('view engine', 'ejs')

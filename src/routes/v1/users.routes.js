@@ -5,6 +5,7 @@ const { userController } = require('../../controller');
 const validate = require('../../middleware/validate');
 const authMiddleware = require('../../middleware/auth');
 const { upload } = require('../../middleware/upload');
+const passport = require('passport')
 
 const router = express.Router()
 
@@ -63,6 +64,17 @@ router.post(
     userController.logout
 )
 
+router.get('/google',
+    passport.authenticate('google', { scope: ['profile'] })
+);
+
+router.get('/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    });
+
 
 
 // router.get(
@@ -84,7 +96,7 @@ router.post(
 // router.param("id", (req, res, next, id) => {
 //     let fData = Data.find((v) => v.id === parseInt(id))
 //     req.user = fData
-    
+
 //     next();
 // });
 
