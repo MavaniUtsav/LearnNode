@@ -1,4 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const passport = require('passport')
 
 const connectPassport = async () => {
@@ -19,4 +20,27 @@ const connectPassport = async () => {
     }
 }
 
-module.exports = connectPassport
+const connectFacebook = async () => {
+    try {
+        await passport.use(new FacebookStrategy({
+            clientID: '754709059540345',
+            clientSecret: 'e51c06feb65d8234355e5abfc87cb953',
+            callbackURL: "http://localhost:3000/v1/users/facebook/callback"
+          },
+          function(accessToken, refreshToken, profile, cb) {
+            // User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+            //   return cb(err, user);
+            // });
+          }
+        ));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+module.exports = {
+    connectPassport,
+    connectFacebook
+}

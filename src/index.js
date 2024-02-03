@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const cors = require("cors");
 const passport = require('passport')
-const connectPassport = require('./utils/passport')
+const { connectPassport, connectFacebook } = require('./utils/passport')
 
 const corsOptions = {
     origin: '*',
@@ -37,6 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 connectPassport()
+connectFacebook()
 
 app.use('/v1', routes)
 app.set('view engine', 'ejs')
