@@ -8,9 +8,11 @@ const authMiddleware = require('../../middleware/auth');
 const router = express.Router()
 
 router.get(
-    '/list-category',
-    validate(categoryValidation.getCategory),
+    '/get-category',
+    authMiddleware(['admin', 'seller']),
+    // validate(categoryValidation.getCategory),
     categoryController.getCategory
+    
 )
 
 router.get(

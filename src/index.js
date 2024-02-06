@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const cors = require("cors");
 const passport = require('passport')
+const session = require('express-session')
 const { connectPassport, connectFacebook } = require('./utils/passport')
 
 const corsOptions = {
@@ -27,7 +28,7 @@ app.use(bodyParser.json());
 app.use(cookieParser())
 app.use(express.json()) // for parsing application/json
 
-app.use(require('express-session')({
+app.use(session({
     secret: 'sdvfsdghbsdfmjhkrthr',
     resave: false,
     saveUninitialized: false

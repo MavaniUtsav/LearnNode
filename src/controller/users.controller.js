@@ -267,5 +267,6 @@ module.exports = {
     loginUser,
     generateNewTokens,
     logout,
-    updateUser
+    updateUser,
+    accessRefreshToken
 }

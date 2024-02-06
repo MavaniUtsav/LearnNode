@@ -72,7 +72,12 @@ router.get('/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/');
+        console.log(req.isAuthenticated());
+        console.log(req.user);
+        console.log(req.session);
+
+        res.send('Ok');
+
     });
 
 router.get('/facebook',
