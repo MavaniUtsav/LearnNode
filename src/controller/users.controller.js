@@ -8,6 +8,7 @@ const { upload } = require("../middleware/upload");
 
 const accessRefreshToken = async (userId) => {
     try {
+        console.log('userID', userId);
         const user = await User.findOne({ _id: userId })
 
         const accessToken = await jwt.sign(
@@ -33,7 +34,7 @@ const accessRefreshToken = async (userId) => {
         user.refresh_token = refreshToken
 
         await user.save()
-
+            console.log('accessrefreshToken', accessToken);
         return { accessToken, refreshToken }
     } catch (error) {
 

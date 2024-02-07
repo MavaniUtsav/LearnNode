@@ -5,7 +5,10 @@ const { userController } = require('../../controller');
 const validate = require('../../middleware/validate');
 const authMiddleware = require('../../middleware/auth');
 const { upload } = require('../../middleware/upload');
-const passport = require('passport')
+const passport = require('passport');
+const { accessRefreshToken } = require('../../controller/users.controller');
+const { sendOTP, verifyOTP } = require('../../utils/sendOtp');
+const { sendMail } = require('../../utils/mailer');
 
 const router = express.Router()
 
@@ -70,14 +73,16 @@ router.get('/google',
 
 router.get('/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
-    function (req, res) {
+    async function (req, res) {
         // Successful authentication, redirect home.
         console.log(req.isAuthenticated());
         console.log(req.user);
         console.log(req.session);
 
+        console.log('ID', req.user._id);
+        const { accessToken } = await accessRefreshToken(req.user._id)
+        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true })
         res.send('Ok');
-
     });
 
 router.get('/facebook',
@@ -89,6 +94,26 @@ router.get('/facebook/callback',
         // Successful authentication, redirect home.
         res.redirect('/');
     });
+
+router.post(
+    '/sendOtp',
+    sendOTP,
+    async (req, res) => {
+        res.json({
+            message: "OTP sent successfully"
+        })
+    }
+)
+
+router.post(
+    '/verifyOtp',
+    verifyOTP,
+)
+
+router.post(
+    '/sendMail',
+    sendMail,
+)
 
 // router.get(
 //     '/protected-route',

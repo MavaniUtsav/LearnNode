@@ -19,7 +19,7 @@ const connectPassport = async () => {
                         const user = await User.create({
                             googleId: profile.id,
                             name: profile.displayName,
-                            role: 'seller'
+                            role: 'user'
                         })
 
                         const { accessToken, refreshToken } = await accessRefreshToken(user.id)

@@ -19,6 +19,7 @@ const authMiddleware = (roles) => async (req, res, next) => {
 
             next()
         } else {
+            console.log('accessToken sgsagafddddddddaaaaaaaaaaaaaaaaaa');
             const Token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
             if (!Token) {
