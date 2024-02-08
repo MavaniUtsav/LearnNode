@@ -9,6 +9,7 @@ const passport = require('passport');
 const { accessRefreshToken } = require('../../controller/users.controller');
 const { sendOTP, verifyOTP } = require('../../utils/sendOtp');
 const sendMail = require('../../utils/mailer');
+const makePdf = require('../../utils/pdfMake');
 
 const router = express.Router()
 
@@ -113,6 +114,11 @@ router.post(
 router.post(
     '/sendMail',
     sendMail,
+)
+
+router.get(
+    '/getPdf',
+    makePdf,
 )
 
 // router.get(

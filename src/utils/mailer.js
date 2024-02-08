@@ -33,9 +33,8 @@ const sendMail = async (req, res) => {
                     content: 'Hello this is test attachment file'
                 },
                 {
-                    filename: 'img_nature_Test.jpg',
+                    filename: 'Test_pdf.pdf',
                     content: image,
-                    encoding: 'base64',
                 }
             ]
         });
