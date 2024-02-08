@@ -1,47 +1,59 @@
 const nodemailer = require('nodemailer')
+const fs = require('fs')
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.forwardemail.net",
-    port: 465,
-    secure: true,
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
-        // TODO: replace `user` and `pass` values from <https://forwardemail.net>
         user: "utsavmavani01@gmail.com",
-        pass: "Mavani@990",
+        pass: "eaxm pbbr ovmy bxsg",
+    },
+    tls: {
+        rejectUnauthorized: false, // Add this line to avoid certificate validation issues
     },
 });
 
-const sendMail = async () => {
-    const info = await transporter.sendMail({
-        from: 'utsavmavani01@gmail.com', // sender address
-        to: "yashbhalani007@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world? Utsav", // plain text body
-        html: "<b>Hello world?</b>", // html body
-    });
+const image = fs.readFileSync('./src/temp/2b34181f-bc15-42d8-98cb-4d26099afbdb1705304702492HMBoysLong-SleevedCottonShirts1.jpg', 'base64')
+const image2 = fs.readFileSync('./src/temp/8f2b9366-c962-4d34-9475-8d5f71209cff1689420546451KALINIBlackEmbellishedSequinnedPureGeorgetteSaree6.jpg', 'base64')
 
-    console.log("Message sent: %s", info.messageId);
+const recipients = ['affiliat.utsav2022@gmail.com', 'yashbhalani007@gmail.com'];
+const sendMail = async (req, res) => {
+    try {
+        const info = await transporter.sendMail({
+            from: 'utsavmavani01@gmail.com', // sender address
+            to: recipients.join(', '), // list of receivers
+            subject: "Hello ✔", // Subject line
+            text: "Hello world? Keval tare thay gyu??", // plain text body
+            html: "<b>Hello world?</b>", // html body
+            attachments: [
+                {
+                    filename: 'test.txt',
+                    content: 'Hello this is test attachment file'
+                },
+                {
+                    filename: 'img_nature_Test.jpg',
+                    content: image,
+                    encoding: 'base64',
+                }
+            ]
+        });
+
+        if (!info) {
+            return res.status(500).send('Error sending email')
+        }
+        console.log("Message sent: %s", info.messageId);
+        res.json({
+            message: 'Email sent' + info.messageId,
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({
+            message: 'Error sending email: ' + error.message,
+        });
+    }
+
 }
 
-module.exports = {
-    sendMail
-}
-// async function main() {
-//     // send mail with defined transport object
-//     const info = await transporter.sendMail({
-//         from: 'utsavmavani01@gmail.com', // sender address
-//         to: "yashbhalani007@gmail.com", // list of receivers
-//         subject: "Hello ✔", // Subject line
-//         text: "Hello world? Utsav", // plain text body
-//         html: "<b>Hello world?</b>", // html body
-//     });
-
-//     console.log("Message sent: %s", info.messageId);
-//     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-//     //
-//     // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
-//     //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
-//     //       <https://github.com/forwardemail/preview-email>
-//     //
-// }
+module.exports = sendMail

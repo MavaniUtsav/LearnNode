@@ -8,7 +8,7 @@ const { upload } = require('../../middleware/upload');
 const passport = require('passport');
 const { accessRefreshToken } = require('../../controller/users.controller');
 const { sendOTP, verifyOTP } = require('../../utils/sendOtp');
-const { sendMail } = require('../../utils/mailer');
+const sendMail = require('../../utils/mailer');
 
 const router = express.Router()
 
