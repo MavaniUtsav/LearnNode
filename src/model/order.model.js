@@ -26,13 +26,13 @@ const orderSchema = mongoose.Schema(
         },
         shipping_address: {
             type: String,
-            required: true,
+            // required: true,
             trim: true
         },
-        order_type: {
-            type: String, // "Prepaid" or "COD",
-            enum: ["Prepaid","COD"]
-        },
+        // order_type: {
+        //     type: String, // "Prepaid" or "COD",
+        //     enum: ["Prepaid","COD"]
+        // },
         payment_id: {
             type: mongoose.Types.ObjectId,
             ref: 'Payment'
@@ -46,15 +46,15 @@ const orderSchema = mongoose.Schema(
             type: Number,
             default: 0,
         },
-        totalPrice: {
-            type: Number,
-            required: true
-        }
+        // totalPrice: {
+        //     type: Number,
+        //     required: true
+        // }
     },
     {
         timestamps: true
     }
 )
 
-const OrderSchema = mongoose.model('OrderSchema', orderSchema)
-module.exports = OrderSchema;
+const Order = mongoose.model('order', orderSchema)
+module.exports = Order;

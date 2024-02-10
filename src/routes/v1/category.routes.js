@@ -9,8 +9,8 @@ const router = express.Router()
 
 router.get(
     '/get-category',
-    authMiddleware(['admin', 'seller']),
-    // validate(categoryValidation.getCategory),
+    // authMiddleware(['admin', 'seller']),
+    validate(categoryValidation.getCategory),
     categoryController.getCategory
     
 )

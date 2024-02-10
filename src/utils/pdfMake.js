@@ -1,23 +1,22 @@
 const pdfMake = require('pdfmake/build/pdfmake');
 const pdfFonts = require('pdfmake/build/vfs_fonts');
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs');
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const fontsDirectory = path.join(__dirname, 'src', 'fonts');
-pdfMake.fonts = {
-    Roboto: {
-        normal: path.join(fontsDirectory, 'Roboto-Regular.ttf'),
-        bold: path.join(fontsDirectory, 'Roboto-Medium.ttf'),
-        italics: path.join(fontsDirectory, 'Roboto-Italic.ttf'),
-        bolditalics: path.join(fontsDirectory, 'Roboto-MediumItalic.ttf')
-    },
-}
+// const fontsDirectory = path.join(__dirname, 'src', 'fonts');
+// pdfMake.fonts = {
+//     Roboto: {
+//         normal: path.join(fontsDirectory, 'Roboto-Regular.ttf'),
+//         bold: path.join(fontsDirectory, 'Roboto-Medium.ttf'),
+//         italics: path.join(fontsDirectory, 'Roboto-Italic.ttf'),
+//         bolditalics: path.join(fontsDirectory, 'Roboto-MediumItalic.ttf')
+//     },
+// }
 const image = fs.readFileSync('./src/temp/2b34181f-bc15-42d8-98cb-4d26099afbdb1705304702492HMBoysLong-SleevedCottonShirts1.jpg', 'base64')
 
 const pdfDefinition = {
-    pageSize: 'A4',
     content: [
         { text: 'PDF with Table Example', fontSize: 18, bold: true, alignment: 'center', margin: [0, 0, 0, 10] },
         {
@@ -34,17 +33,13 @@ const pdfDefinition = {
             image: 'data:image/jpeg;base64,' + image,
             width: 200,
         }
-    ],
-    defaultStyle: {
-        font: 'Roboto'
-    }
+    ]
 };
 
 const makePdf = async (req, res) => {
-    console.log('makePDF');
     try {
         const base64 = await pdfMake.createPdf(pdfDefinition).getBase64();
-
+        
         // Set appropriate headers for PDF response
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'inline; filename=example.pdf');
@@ -76,6 +71,7 @@ module.exports = makePdf
 //         console.log('resolve');
 //         resolve(result);
 //     }, (error) => {
+    
 //         console.log('reject');
 //         reject(error);
 //     });

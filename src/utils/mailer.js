@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer')
-const fs = require('fs')
+const pdfMake = require('pdfmake/build/pdfmake');
+const pdfFonts = require('pdfmake/build/vfs_fonts');
+const fs = require('fs');
+const { getOrders } = require('../services/order.service');
+const { log } = require('console');
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -16,43 +22,56 @@ const transporter = nodemailer.createTransport({
 });
 
 const image = fs.readFileSync('./src/temp/2b34181f-bc15-42d8-98cb-4d26099afbdb1705304702492HMBoysLong-SleevedCottonShirts1.jpg', 'base64')
-const image2 = fs.readFileSync('./src/temp/8f2b9366-c962-4d34-9475-8d5f71209cff1689420546451KALINIBlackEmbellishedSequinnedPureGeorgetteSaree6.jpg', 'base64')
 
-const recipients = ['affiliat.utsav2022@gmail.com', 'yashbhalani007@gmail.com'];
+const pdfDefinition = {
+    pageSize: 'A4',
+    content: [
+        { text: 'Invoice', fontSize: 25, bold: true, alignment: 'center' },
+        {
+            table: {
+                headers: ['Name', 'Age', 'City'],
+                body: [
+                    ['John Doe', 30, 'New York'],
+                    ['Jane Doe', 25, 'San Francisco'],
+                    ['Bob Smith', 35, 'Los Angeles']
+                ]
+            }
+        },
+        {
+            image: 'data:image/jpg;base64,' + image,
+            width: 200,
+        }
+    ]
+};
 const sendMail = async (req, res) => {
-    try {
-        const info = await transporter.sendMail({
+    const orderData = await getOrders()
+    console.log(orderData);
+
+    const base64 = pdfMake.createPdf(pdfDefinition);
+    base64.getBase64((encoded) => {
+        const mailOptions = {
             from: 'utsavmavani01@gmail.com', // sender address
-            to: recipients.join(', '), // list of receivers
+            to: 'affiliat.utsav2022@gmail.com', // list of receivers
             subject: "Hello ✔", // Subject line
             text: "Hello world? Keval tare thay gyu??", // plain text body
             html: "<b>Hello world?</b>", // html body
             attachments: [
                 {
-                    filename: 'test.txt',
-                    content: 'Hello this is test attachment file'
-                },
-                {
                     filename: 'Test_pdf.pdf',
-                    content: image,
+                    content: encoded,
+                    encoding: 'base64'
                 }
             ]
-        });
-
-        if (!info) {
-            return res.status(500).send('Error sending email')
         }
-        console.log("Message sent: %s", info.messageId);
-        res.json({
-            message: 'Email sent' + info.messageId,
-        })
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send({
-            message: 'Error sending email: ' + error.message,
-        });
-    }
 
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            res.status(200).json({ message: `Email has been sent!` })
+        })
+    })
 }
 
 module.exports = sendMail
