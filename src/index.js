@@ -9,6 +9,7 @@ const cors = require("cors");
 const passport = require('passport')
 const session = require('express-session')
 const { connectPassport, connectFacebook } = require('./utils/passport')
+const connetcSocket = require('./utils/socket.io')
 
 const corsOptions = {
     origin: '*',
@@ -21,6 +22,7 @@ app.use(cors(corsOptions))
 dotenv.config()
 
 connectDB()
+connetcSocket()
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -190,8 +192,8 @@ app.use((err, req, res, next) => {
 })
 
 
-app.listen(3000, () => {
-    console.log('Server started at port 3000');
+app.listen(5000, () => {
+    console.log('Server started at port 5000');
 })
 
 // 5X675E2B26GLFHMKALZBMHFN

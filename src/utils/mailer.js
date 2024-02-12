@@ -23,29 +23,31 @@ const transporter = nodemailer.createTransport({
 
 const image = fs.readFileSync('./src/temp/2b34181f-bc15-42d8-98cb-4d26099afbdb1705304702492HMBoysLong-SleevedCottonShirts1.jpg', 'base64')
 
-const pdfDefinition = {
-    pageSize: 'A4',
-    content: [
-        { text: 'Invoice', fontSize: 25, bold: true, alignment: 'center' },
-        {
-            table: {
-                headers: ['Name', 'Age', 'City'],
-                body: [
-                    ['John Doe', 30, 'New York'],
-                    ['Jane Doe', 25, 'San Francisco'],
-                    ['Bob Smith', 35, 'Los Angeles']
-                ]
-            }
-        },
-        {
-            image: 'data:image/jpg;base64,' + image,
-            width: 200,
-        }
-    ]
-};
+
 const sendMail = async (req, res) => {
     const orderData = await getOrders()
     console.log(orderData);
+
+    const pdfDefinition = {
+        pageSize: 'A4',
+        content: [
+            { text: 'Invoice', fontSize: 25, bold: true, alignment: 'center' },
+            {
+                table: {
+                    headers: ['Sr no.', 'Product Name', 'Description','Rate', 'Qty','Total Amount'],
+                    body: [
+                        ['John Doe', 30, 'New York'],
+                        ['Jane Doe', 25, 'San Francisco'],
+                        ['Bob Smith', 35, 'Los Angeles']
+                    ]
+                }
+            },
+            {
+                image: 'data:image/jpg;base64,' + image,
+                width: 200,
+            }
+        ]
+    };
 
     const base64 = pdfMake.createPdf(pdfDefinition);
     base64.getBase64((encoded) => {
