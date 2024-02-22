@@ -8,5 +8,5 @@ module.exports.PaymentModel = require('./payment.model')
 module.exports.CartModel = require('./cart.model')
 module.exports.VariantModel = require('./variant.model')
 module.exports.ReviewModel = require('./review.model')
-
+module.exports.OrdersModel = require('./orders.model')
 
