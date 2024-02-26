@@ -33,7 +33,9 @@
     "passport-google-oauth20": "^2.0.0",
     "pdfmake": "^0.2.9",
     "socket.io": "^4.7.4",
+    "swagger-ui-express": "^5.0.0",
     "twilio": "^4.21.0",
+    "yamljs": "^0.3.0",
     "zod": "^3.22.4"
   }
 }

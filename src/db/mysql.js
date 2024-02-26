@@ -10,7 +10,7 @@ class MYSQLDB {
 
         this.connection.connect((error) => {
             if (error) {
-                throw new Error(error)
+                // throw new Error(error)
             }
 
             console.log('MYSQL Database connected');

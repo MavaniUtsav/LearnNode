@@ -10,6 +10,9 @@ const passport = require('passport')
 const session = require('express-session')
 const { connectPassport, connectFacebook } = require('./utils/passport')
 const connetcSocket = require('./utils/socket.io')
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./src/utils/api.yaml');
 
 const corsOptions = {
     origin: '*',
@@ -43,6 +46,7 @@ connectPassport()
 connectFacebook()
 
 app.use('/v1', routes)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.set('view engine', 'ejs')
 
 // let institutes = [
@@ -192,8 +196,8 @@ app.use((err, req, res, next) => {
 })
 
 
-app.listen(5000, () => {
-    console.log('Server started at port 5000');
+app.listen(3000, () => {
+    console.log('Server started at port 3000');
 })
 
 // 5X675E2B26GLFHMKALZBMHFN
